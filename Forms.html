@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallary Submissions</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #000000;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+  }
+
+  .header {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .permanent-text {
+    font-size: 18px;
+    text-align: center;
+    max-width: 80%; /* Limit the maximum width of the text */
+    margin-bottom: 20px; /* Add spacing below the permanent text */
+  }
+
+  .button {
+    display: inline-block;
+    padding: 16px 32px;
+    width: auto;
+    background-color: #800080;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .button:hover {
+    background-color: #6a006a;
+  }
+
+  .footer {
+    font-size: 14px;
+    margin-top: 20px;
+  }
+
+  .back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .back-button:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+  <button class="back-button" onclick="goBack()">Back</button>
+  <h1 class="header">PixyShare</h1>
+  <p class="permanent-text">Please Upload Some of your best photos. We will select some to be featured in the Gallary. We will add a proper and funtional upload system later.</p>
+  <button class="button" onclick="redirectToLink()">Submit Now!</button>
+   <p class="permanent-text">This Button will redirect you too an google forms where you can upload your pics.</p>
+  <p class="footer">© 2023 PixyShare. All rights reserved.</p>
+
+  <script>
+    function redirectToLink() {
+      window.location.href = 'https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fdocs.google.com%2Fforms%2Fd%2Fe%2F1FAIpQLSeSxHMCv2fEJLwZN0VG7ZphILBpkVY_CDZk3FsvUhI8Y5OIDw%2Fviewform%3Fusp%3Dsend_form&followup=https%3A%2F%2Fdocs.google.com%2Fforms%2Fd%2Fe%2F1FAIpQLSeSxHMCv2fEJLwZN0VG7ZphILBpkVY_CDZk3FsvUhI8Y5OIDw%2Fviewform%3Fusp%3Dsend_form&ifkv=AXo7B7U-Blm59U4214IpzvlVdQuozStApkmZdg9KLt7RiS1gE2AS4il3FOU1Q54iz7JRcOB0gcel&ltmpl=forms&osid=1&passive=1209600&service=wise&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S889556649%3A1691558837176062'; // Replace with your desired link
+    }
+
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+</body>
+</html>
