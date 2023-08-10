@@ -3,88 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gallary Submissions</title>
+<title>Gallarey Submissions</title>
 <style>
   body {
     margin: 0;
-    padding: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
-    min-height: 100vh;
-    background-color: #000000;
-    font-family: Arial, sans-serif;
-    color: #ffffff;
+    justify-content: space-between;
+    height: 100vh;
+    background: linear-gradient(135deg, #A93E55, #3E1875); /* Violet to Red gradient */
   }
 
-  .header {
-    font-size: 24px;
-    margin-bottom: 20px;
+  #background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
   }
 
-  .permanent-text {
-    font-size: 18px;
-    text-align: center;
-    max-width: 80%; /* Limit the maximum width of the text */
-    margin-bottom: 20px; /* Add spacing below the permanent text */
+  .circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.8;
+    transition: all 5s ease-in-out;
   }
 
-  .button {
-    display: inline-block;
-    padding: 16px 32px;
-    width: auto;
-    background-color: #800080;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    font-size: 18px;
+  #centerButton {
+    font-size: 3vw;
     font-weight: bold;
+    text-align: center;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+    padding: 8px 15px;
+    border-radius: 20px;
+    z-index: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    text-decoration: none;
+    position: absolute;
+    top: calc(50% - 20px); /* Adjust to position the button */
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
-  .button:hover {
-    background-color: #6a006a;
+  #smallText {
+    font-size: 1.5vw;
+    color: white;
+    text-align: center;
+    margin-top: 200px;
   }
 
-  .footer {
-    font-size: 14px;
+  #backButton {
+    font-size: 1.8vw;
+    color: white;
+    text-align: center;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  #headerText {
+    font-size: 2.5vw;
+    font-weight: bold;
+    color: white;
+    text-align: center;
     margin-top: 20px;
   }
 
-  .back-button {
+  #additionalHeaderText {
+    font-size: 1.8vw;
+    color: white;
+    text-align: center;
+    margin-top: -100px; /* Adjust to move the additional text higher */
     position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: transparent;
-    border: none;
-    color: #ffffff;
-    font-size: 14px;
-    cursor: pointer;
+    top: calc(50% - 100px); /* Adjust to position the additional text */
   }
 
-  .back-button:hover {
-    text-decoration: underline;
+  #footerText {
+    font-size: 2vw;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
   }
 </style>
 </head>
 <body>
-  <button class="back-button" onclick="goBack()">Back</button>
-  <h1 class="header">PixyShare</h1>
-  <p class="permanent-text">Please Upload Some of your best photos. We will select some to be featured in the Gallary. We will add a proper and funtional upload system later.</p>
-  <button class="button" onclick="redirectToLink()">Submit Now!</button>
-   <p class="permanent-text">This Button will redirect you too an google forms where you can upload your pics.</p>
-  <p class="footer">© 2023 PixyShare. All rights reserved.</p>
+<div id="background"></div>
+<header id="headerText">PixyShare</header>
+<div id="additionalHeaderText">Submit Your Best Pictures. We Will Select Few And Add It To Gallery. We Will Add A Proper Upload System Later.</div>
+<a id="centerButton" href="https://forms.gle/Wd3bA486LzfFBG3h8">Submit Your Pictures!</a>
+<div id="smallText">The Above Button Will Redirect You To A Google Form Where You Can Upload Your Pictures</div>
+<div id="backButton">Go Back</div>
+<footer id="footerText">© 2023 PixyShare</footer>
+<script>
+  const numCircles = 15;
+  const colors = ['#FF6B6B', '#98C9E2', '#F8B400', '#71D5A5', '#FF847C', '#A1CDF1'];
 
-  <script>
-    function redirectToLink() {
-      window.location.href = 'https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fdocs.google.com%2Fforms%2Fd%2Fe%2F1FAIpQLSeSxHMCv2fEJLwZN0VG7ZphILBpkVY_CDZk3FsvUhI8Y5OIDw%2Fviewform%3Fusp%3Dsend_form&followup=https%3A%2F%2Fdocs.google.com%2Fforms%2Fd%2Fe%2F1FAIpQLSeSxHMCv2fEJLwZN0VG7ZphILBpkVY_CDZk3FsvUhI8Y5OIDw%2Fviewform%3Fusp%3Dsend_form&ifkv=AXo7B7U-Blm59U4214IpzvlVdQuozStApkmZdg9KLt7RiS1gE2AS4il3FOU1Q54iz7JRcOB0gcel&ltmpl=forms&osid=1&passive=1209600&service=wise&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S889556649%3A1691558837176062'; // Replace with your desired link
-    }
+  const backButton = document.getElementById('backButton');
+  const centerButton = document.getElementById('centerButton');
 
-    function goBack() {
-      window.history.back();
+  backButton.addEventListener('click', animateGradientAndGoBack);
+  centerButton.addEventListener('click', centerButtonClick);
+
+  function createCircle() {
+    const circle = document.createElement('div');
+    circle.className = 'circle';
+    circle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    const size = Math.random() * 15 + 10; // Random size between 10 and 25 pixels
+    const maxWidth = 90 - size; // Maximum left position to prevent overflow
+    const maxHeight = 90 - size; // Maximum top position to prevent overflow
+    circle.style.width = `${size}vw`;
+    circle.style.height = `${size}vw`;
+    const marginX = 5; // Adjust horizontal margin
+    const marginY = 5; // Adjust vertical margin
+    circle.style.left = `${Math.random() * (maxWidth - marginX) + marginX}%`;
+    circle.style.top = `${Math.random() * (maxHeight - marginY) + marginY}%`;
+    return circle;
+  }
+
+  function updateCircles() {
+    const background = document.getElementById('background');
+    background.innerHTML = '';
+
+    for (let i = 0; i < numCircles; i++) {
+      const circle = createCircle();
+      background.appendChild(circle);
     }
-  </script>
+  }
+
+  function animateCircles() {
+    const circles = document.querySelectorAll('.circle');
+    circles.forEach(circle => {
+      circle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      circle.style.width = `${Math.random() * 15 + 10}vw`;
+      circle.style.height = circle.style.width;
+      const maxWidth = 90 - parseFloat(circle.style.width); // Maximum left position to prevent overflow
+      const maxHeight = 90 - parseFloat(circle.style.width); // Maximum top position to prevent overflow
+      const marginX = 5; // Adjust horizontal margin
+      const marginY = 5; // Adjust vertical margin
+      circle.style.left = `${Math.random() * (maxWidth - marginX) + marginX}%`;
+      circle.style.top = `${Math.random() * (maxHeight - marginY) + marginY}%`;
+    });
+
+    setTimeout(animateCircles, 5000); // Animate every 5 seconds
+  }
+
+  function animateGradientAndGoBack() {
+    const body = document.body;
+    body.style.animation = 'gradientAnimation 2s forwards';
+    setTimeout(() => {
+      window.history.back(); // Go back in browser history
+    }, 2000); // Wait for the animation to complete before going back
+  }
+
+  function centerButtonClick() {
+    // Add any functionality you want when the center button is clicked
+    console.log("Center button clicked!");
+  }
+
+  updateCircles();
+  animateCircles();
+  animateCircles(); // Start the animation immediately
+</script>
 </body>
 </html>
