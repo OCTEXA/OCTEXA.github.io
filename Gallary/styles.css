@@ -1,16 +1,27 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #000;
-    color: #fff;
+    color: #f6ff00;
     overflow: hidden;
     cursor: none;
     margin: 0; /* Remove default body margin */
 }
 
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #ffff00;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 header {
     text-align: center;
     padding: 20px;
-    background-color: #222;
+    background-color: #000000;
     font-size: 24px;
 }
 
@@ -36,9 +47,19 @@ header {
     box-sizing: border-box;
 }
 
+.image-container {
+    width: 1024px;
+    height: 1024px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
 .gallery-item img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.3s ease-in-out;
 }
 
@@ -48,7 +69,7 @@ header {
 
 .cursor-glow {
     position: absolute;
-    border: 2px solid #fff;
+    border: 2px solid #a1ffd9;
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -70,12 +91,14 @@ header {
 
 .download-button {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: #fff;
+    top: 10px;
+    left: 10px;
+    background-color: #9cffe360;
     color: #000;
     text-decoration: none;
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 14px;
 }
+
+
