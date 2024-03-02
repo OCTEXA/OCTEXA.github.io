@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,13 +19,21 @@
         return /Android/i.test(navigator.userAgent);
     }
 
+    // Function to check if the device is running iOS
+    function isiOS() {
+        return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
     // Function to load the appropriate HTML file
     function loadHTML() {
         if (isAndroid()) {
             // If the device is Android, load the Android HTML file
             window.location.href = 'https://pixyshare.in/Android_Pc/index_android.html';
+        } else if (isiOS()) {
+            // If the device is iOS, load the iOS HTML file
+            window.location.href = 'https://pixyshare.in/Android_Pc/index_android.html';
         } else {
-            // If the device is not Android (assume PC), load the PC HTML file
+            // If the device is not Android or iOS (assume PC), load the PC HTML file
             window.location.href = 'https://pixyshare.in/Android_Pc/index_pc.html';
         }
     }
@@ -33,3 +44,4 @@
 
 </body>
 </html>
+
