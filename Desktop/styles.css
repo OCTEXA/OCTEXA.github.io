@@ -7,7 +7,7 @@
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    background-image: url('https://github.com/OCTEXA/OCTEXA.github.io/blob/main/Aesthetic/flo.jpg?raw=true');
+    background-image: url('https://i.imgur.com/5T8vrhH.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -142,19 +142,19 @@ main {
     text-align: center;
     margin: 20px 0;
     font-size: 2rem;
-    color: #fff;
+    color: #eeffbb;
 }
 
 .gallery-description {
     text-align: center;
     margin: 10px 0 30px;
     font-size: 1.2rem;
-    color: #fff;
+    color: #eeffbb;
 }
 
 footer {
     background-color: rgba(29, 43, 48, 0.8); /* Updated color */
-    color: #fff;
+    color: #eeffbb;
     text-align: center;
     padding: 1rem;
     margin-top: 2rem;
@@ -169,7 +169,7 @@ footer {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #555;
+    background-color: rgba(29, 43, 48, 0.8);
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;

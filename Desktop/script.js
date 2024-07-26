@@ -1,6 +1,29 @@
 const images = [
-    'https://pixyshare.in/Gallary/image6.JPG',
-    'https://pixyshare.in/Gallary/image4.jpg'
+    'https://i.imgur.com/HtkZi5y.jpg',
+    'https://i.imgur.com/aDlztxB.jpg',
+    'https://i.imgur.com/DJGQPhe.jpg',
+    'https://i.imgur.com/SUH0OY3.jpg',
+    'https://i.imgur.com/PDh4HYU.jpg',
+    'https://i.imgur.com/5T8vrhH.jpg',
+    'https://i.imgur.com/NEaCWHD.jpg',
+    'https://i.imgur.com/BHPsLrf.jpg',
+    'https://i.imgur.com/y8gw15D.jpg',
+    'https://i.imgur.com/RFCDszl.jpg',
+    'https://i.imgur.com/NlOybN7.jpg',
+    'https://i.imgur.com/AOjmBUh.jpg',
+    'https://i.imgur.com/jcrPWPr.jpg',
+    'https://i.imgur.com/0YWiJuK.jpg',
+    'https://i.imgur.com/LA6HWlW.jpg',
+    'https://i.imgur.com/flT1sYF.jpg',
+    'https://i.imgur.com/4yAf6yA.jpg',
+    'https://i.imgur.com/LF3eECA.jpg',
+    'https://i.imgur.com/Yl2e3CC.jpg',
+    'https://i.imgur.com/HtkZi5y.jpg',
+    'https://i.imgur.com/aDlztxB.jpg',
+    'https://i.imgur.com/0Bgsa4p.jpg',
+    'https://i.imgur.com/PpLgbnm.jpg',
+    'https://i.imgur.com/K9H3IA2.jpg'
+    
 ];
 
 // Carousel functionality
