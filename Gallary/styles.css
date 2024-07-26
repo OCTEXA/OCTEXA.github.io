@@ -1,0 +1,104 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #000;
+    color: #f6ff00;
+    overflow: hidden;
+    cursor: none;
+    margin: 0; /* Remove default body margin */
+}
+
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #ffff00;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #000000;
+    font-size: 24px;
+}
+
+#gallery-container {
+    height: 100vh;
+    overflow-y: auto;
+}
+
+#gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.gallery-item {
+    position: relative;
+    margin: 10px;
+    overflow: hidden;
+    cursor: none;
+    transition: transform 0.3s ease-in-out;
+    width: calc(50% - 20px);
+    box-sizing: border-box;
+}
+
+.image-container {
+    width: 1024px;
+    height: 1024px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+}
+
+.cursor-glow {
+    position: absolute;
+    border: 2px solid #a1ffd9;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: cursorGlow 0.5s infinite alternate;
+}
+
+@keyframes cursorGlow {
+    from {
+        width: 30px;
+        height: 30px;
+        opacity: 0.7;
+    }
+    to {
+        width: 50px;
+        height: 50px;
+        opacity: 0;
+    }
+}
+
+.download-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #9cffe360;
+    color: #000;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+

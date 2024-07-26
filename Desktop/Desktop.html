@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2109016691861219"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">HOME</a></li>
+                <li><a href="#gallery">GALLERY</a></li>
+                <li><a href="#about">ABOUT US</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="gallery">
+            <div class="image-grid">
+                <div class="image-container">
+                    <div class="image-item"><img src="https://pixyshare.in/Gallary/image6.JPG" alt="Image 6"></div>
+                    <div class="image-item"><img src="https://pixyshare.in/Gallary/image4.jpg" alt="Image 4"></div>
+                    <div class="image-item"><img src="https://pixyshare.in/Gallary/image6.JPG" alt="Image 6"></div>
+                    <div class="image-item"><img src="https://pixyshare.in/Gallary/image4.jpg" alt="Image 4"></div>
+                    <div class="image-item"><img src="https://pixyshare.in/Gallary/image6.JPG" alt="Image 6"></div>
+                    <div class="image-item"><img src="https://pixyshare.in/Gallary/image4.jpg" alt="Image 4"></div>
+                    <div class="image-item"><img src="https://pixyshare.in/Gallary/image6.JPG" alt="Image 6"></div>
+                </div>
+            </div>
+            <h2 class="gallery-heading">Our Beautiful Gallery</h2>
+            <p class="gallery-description">Enjoy the stunning images captured from around the world.</p>
+        </section>
+
+        <section id="carousel">
+            <div class="carousel">
+                <button class="carousel-button prev">&lt;</button>
+                <div class="carousel-container">
+                    <img src="https://pixyshare.in/Gallary/image6.JPG" alt="Carousel Image" id="carouselImage">
+                </div>
+                <button class="carousel-button next">&gt;</button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <h2>Contact Us</h2>
+        <p class="footer-description">We'd love to hear from you! Follow us on social media:</p>
+        <div class="footer-buttons">
+            <button onclick="window.location.href='https://instagram.com';">Instagram</button>
+            <button onclick="window.location.href='https://discord.com';">Discord</button>
+            <button onclick="window.location.href='https://github.com';">GitHub</button>
+        </div>
+    </footer>
+
+    <button class="back-to-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">↑</button>
+
+    <script src="script.js"></script>
+</
