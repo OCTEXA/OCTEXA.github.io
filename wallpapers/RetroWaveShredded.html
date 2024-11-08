@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful Image Display</title>
+    <style>
+        /* Reset default margins and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body, html {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        /* Image Heading */
+        .image-heading {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Image Container */
+        .image-container {
+            width: 90%;
+            max-width: 600px;
+            flex: 1; /* Ensures the image container fills the remaining space */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Image Styling */
+        .image-container img {
+            max-width: 100%;
+            max-height: 80vh; /* Limits image height for portrait mode */
+            height: auto;
+            border-radius: 12px;
+        }
+
+        /* Download Button Styling */
+        .download-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #007aff; /* iOS blue */
+            border: none;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4); /* Blue shadow */
+            margin-bottom: 20px;
+        }
+
+        /* Subtle Glowing Effect on Hover */
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 122, 255, 0.6);
+        }
+
+        /* Styling for Portrait Mode on Tablets */
+        @media (max-width: 1024px) and (orientation: portrait) {
+            .image-container img {
+                max-height: 60vh; /* Limits image height in portrait mode */
+            }
+
+            .download-btn {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                margin-bottom: 0;
+            }
+        }
+
+        /* Styling for Mobile to keep button fixed at bottom */
+        @media (max-width: 768px) {
+            .download-btn {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Heading for Image Name -->
+    <div class="image-heading" id="imageHeading"></div>
+
+    <!-- Image Container -->
+    <div class="image-container">
+        <img src="Pictures/RetroWaveShredded.jpg" alt="Displayed Image" id="displayedImage">
+    </div>
+
+    <!-- Download Button -->
+    <a href="Pictures/RetroWaveShredded.jpg" download class="download-btn">
+        <span>Download Image</span>
+    </a>
+
+    <script>
+        // JavaScript to extract and display the image name without the extension
+        document.addEventListener("DOMContentLoaded", function() {
+            const imagePath = document.getElementById("displayedImage").getAttribute("src");
+            const imageName = imagePath.split('/').pop().split('.').slice(0, -1).join('.');
+            document.getElementById("imageHeading").innerText = imageName;
+        });
+    </script>
+
+</body>
+</html>
