@@ -1,0 +1,202 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"poppins",sans-serif;
+}
+body{
+    background-image: url('https://i.imgur.com/FM8oMvG.jpeg');
+    background-color: #2c3e50;
+    background-blend-mode: overlay;
+    background-size: cover; /* Makes the image cover the entire viewport */
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px); /* Adds blur to the background */
+    -webkit-backdrop-filter: blur(5px); /* For Safari support */
+    z-index: -1;
+}
+
+.container{
+    background: rgba(0, 0, 0, 0.7);
+    width: 450px;
+    padding: 1.5rem;
+    margin: 50px auto;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    animation: glow 3s infinite alternate;
+    z-index: 1;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px rgba(66, 133, 244, 0.5);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(66, 133, 244, 0.8), 0 0 30px rgba(66, 133, 244, 0.5);
+    }
+}
+
+form{
+    margin: 0 2rem;
+}
+.form-title{
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 1.3rem;
+    margin-bottom: 0.4rem;
+    color: #ffffff;
+}
+input{
+    color: #ffffff;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #757575;
+    padding-left: 1.5rem;
+    font-size: 15px;
+}
+.input-group{
+    padding: 1% 0;
+    position: relative;
+}
+.input-group i{
+    position: absolute;
+    color: #4285f4;
+}
+input:focus{
+    background-color: transparent;
+    outline: transparent;
+    border-bottom: 2px solid #4285f4;
+}
+input::placeholder{
+    color: transparent;
+}
+label{
+    color: #757575;
+    position: relative;
+    left: 1.2em;
+    top: -1.3em;
+    cursor: auto;
+    transition: 0.3s ease all;
+}
+input:focus~label, input:not(:placeholder-shown)~label{
+    top: -3em;
+    color: #4285f4;
+    font-size: 15px;
+}
+.recover{
+    text-align: right;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+.recover a{
+    text-decoration: none;
+    color: #4285f4;
+}
+.recover a:hover{
+    color: #2962ff;
+    text-decoration: underline;
+}
+button{
+    font-size: 1.1rem;
+    padding: 12px 0;
+    border-radius: 24px;
+    outline: none;
+    border: none;
+    width: 100%;
+    background: #4285f4;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 500;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+button:hover{
+    background: #2962ff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.or{
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    text-align: center;
+    color: #757575;
+}
+.icons{
+    text-align: center;
+}
+.icons i{
+    color: #4285f4;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    margin: 0 15px;
+    transition: 0.3s;
+}
+.icons i:hover{
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 1.6rem;
+    border: 2px solid #4285f4;
+}
+.links{
+    display: flex;
+    justify-content: space-around;
+    padding: 0 4rem;
+    margin-top: 0.9rem;
+    font-weight: bold;
+}
+#signUpButton, #signInButton{
+    color: #4285f4;
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: none;
+}
+#signUpButton:hover, #signInButton:hover {
+    text-decoration: underline;
+    color: #2962ff;
+    transform: none;
+    box-shadow: none;
+}
+.messageDiv{
+    background-color: rgba(255, 59, 48, 0.8);
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 10px;
+    font-size: 1rem;
+    opacity: 0;
+    animation: fadeOut 7s forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}

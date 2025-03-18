@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Match Scoreboard</title>
+    <link rel="stylesheet" href="live.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Live Match Scoreboard</h1>
+        <h2 id="matchStatus">Loading...</h2>
+
+        <div class="teams">
+            <h2 id="team1Name">Team 1</h2>
+            <h2 id="team2Name">Team 2</h2>
+        </div>
+
+        <div class="scoreboard">
+            <p id="battingTeam">Batting: </p>
+            <p id="currentBatter">Current Batter: </p>
+            <p id="scoreTeam1">Score: </p>
+            <p id="scoreTeam2">Score: </p>
+            <p id="overs">Overs: </p>
+            <p id="remainingOvers">Remaining Overs: </p>
+            <p id="bestPlayer">Best Player: </p>
+        </div>
+
+        <h2>Players' Scores</h2>
+        <div class="tables-container">
+            <div class="team-table">
+                <h3>Team 1 Players</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Runs</th>
+                        </tr>
+                    </thead>
+                    <tbody id="team1Table"></tbody>
+                </table>
+            </div>
+
+            <div class="team-table">
+                <h3>Team 2 Players</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Runs</th>
+                        </tr>
+                    </thead>
+                    <tbody id="team2Table"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="live.js"></script>
+</body>
+</html>

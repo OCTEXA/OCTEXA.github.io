@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <h2>Welcome, <span id="adminName"></span></h2>
+
+    <label>
+        <input type="checkbox" id="liveMatchToggle"> Match Live
+    </label>
+
+    <div id="matchDetails" style="display: none;">
+        <label>Team 1: <input type="text" id="team1"></label>
+        <label>Team 2: <input type="text" id="team2"></label>
+        <label>Currently Batting: <input type="text" id="battingTeam"></label>
+        <label>Runs Team 1: <input type="number" id="runsTeam1"></label>
+        <label>Runs Team 2: <input type="number" id="runsTeam2"></label>
+        <label>Best Player: <input type="text" id="bestPlayer"></label>
+        <label>Total Overs: <input type="number" id="totalOvers"></label>
+        <label>Remaining Overs: <input type="number" id="remainingOvers"></label>
+
+        <h3>Team 1 Players</h3>
+        <table id="team1Table">
+            <tr>
+                <th>Player Name</th>
+                <th>Runs</th>
+            </tr>
+            <!-- Player rows will be dynamically added here -->
+        </table>
+
+        <h3>Team 2 Players</h3>
+        <table id="team2Table">
+            <tr>
+                <th>Player Name</th>
+                <th>Runs</th>
+            </tr>
+            <!-- Player rows will be dynamically added here -->
+        </table>
+
+        <button id="saveData">Save Data</button>
+    </div>
+
+    <button id="logout">Logout</button>
+
+    <script type="module" src="admin.js"></script>
+</body>
+</html>
