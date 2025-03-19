@@ -80,7 +80,7 @@ document.getElementById("uploadBtn").addEventListener("click", async () => {
 document.getElementById("logout").addEventListener("click", () => {
     auth.signOut()
         .then(() => {
-            window.location.href = "login.html"; // Redirect to login page
+            window.location.href = "index.html"; // Redirect to login page
         })
         .catch((error) => {
             console.error("Error signing out: ", error);
