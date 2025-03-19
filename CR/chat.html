@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatrooms</title>
+    <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+
+    <button id="logout">Logout</button>
+    
+    <h1>Chatrooms</h1>
+    <p id="userName">Getting Info...</p>
+
+    <!-- Create Chatroom -->
+    <input type="text" id="chatRoomName" placeholder="Enter chatroom name to create one">
+    <button id="createChatRoom">Create Chatroom</button>
+
+    <!-- Chatrooms List -->
+    <div id="chatRooms"></div>
+
+    <!-- Chatroom UI -->
+    <div id="chatRoomUI" style="display: none;">
+        <button id="backToRooms">← Back to Chatrooms</button>
+        <h2 id="chatRoomTitle"></h2>
+        <div id="messages"></div>
+
+        <!-- Send Message -->
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button id="sendMessage">Send</button>
+
+        <!-- Delete Chatroom (Only for creator) -->
+        <button id="deleteChatRoom" style="display: none;">Delete Chatroom</button>
+    </div>
+
+    <script src="chat.js" type="module"></script>
+</body>
+</html>
