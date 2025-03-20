@@ -7,7 +7,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyCFYIaJ-3yl-QTMWv3OVHIpaLjoRmDe5i8",
     authDomain: "scores-524a7.firebaseapp.com",
     projectId: "scores-524a7",
-    storageBucket: "scores-524a7.firebasestorage.app",
+    storageBucket: "scores-524a7.firebaseestorage.app",
     messagingSenderId: "575790497654",
     appId: "1:575790497654:web:2363f54cf8e1a8abb88457",
     measurementId: "G-FKS4PV3G56"
@@ -25,22 +25,27 @@ let userFullName = null;
 // UI Elements
 const userNameElement = document.getElementById("userName");
 const chatRoomsDiv = document.getElementById("chatRooms");
+const chatRoomsList = document.getElementById("chatroomsList");
 const chatRoomUI = document.getElementById("chatRoomUI");
 const chatRoomTitle = document.getElementById("chatRoomTitle");
 const messagesDiv = document.getElementById("messages");
 const messageInput = document.getElementById("messageInput");
 const sendMessageBtn = document.getElementById("sendMessage");
-const createChatRoomBtn = document.getElementById("createChatRoom");
+const createChatRoomBtn = document.getElementById("createChatRoomBtn");
+const createChatRoomModal = document.getElementById("createChatRoomModal");
+const createChatRoom = document.getElementById("createChatRoom");
 const deleteChatRoomBtn = document.getElementById("deleteChatRoom");
 const backToRoomsBtn = document.getElementById("backToRooms");
 const logoutBtn = document.getElementById("logout");
 const chatRoomNameInput = document.getElementById("chatRoomName");
+const closeModal = document.getElementsByClassName("close-modal")[0];
+const bodyElement = document.body;
 
 // Auth State
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUser = user;
-        userNameElement.textContent = "Loading user data...";
+        userNameElement.textContent = "Welcome, ...";
         
         // Get user data from Firestore
         await fetchUserData(user.email);
@@ -109,7 +114,7 @@ logoutBtn.addEventListener("click", () => {
 
 // Load Chatrooms
 async function loadChatRooms() {
-    chatRoomsDiv.innerHTML = "";
+    chatRoomsList.innerHTML = "";
     const querySnapshot = await getDocs(collection(db, "Chatrooms"));
     querySnapshot.forEach((doc) => {
         const chatroom = doc.data();
@@ -117,12 +122,29 @@ async function loadChatRooms() {
         chatroomDiv.classList.add("chatroom-item");
         chatroomDiv.textContent = chatroom.name;
         chatroomDiv.onclick = () => enterChatRoom(doc.id, chatroom);
-        chatRoomsDiv.appendChild(chatroomDiv);
+        chatRoomsList.appendChild(chatroomDiv);
     });
 }
 
+// Modal Functions
+createChatRoomBtn.addEventListener("click", () => {
+    createChatRoomModal.style.display = "block";
+    chatRoomNameInput.focus();
+});
+
+closeModal.addEventListener("click", () => {
+    createChatRoomModal.style.display = "none";
+});
+
+// Close modal when clicking outside of it
+window.addEventListener("click", (event) => {
+    if (event.target === createChatRoomModal) {
+        createChatRoomModal.style.display = "none";
+    }
+});
+
 // Create New Chatroom
-createChatRoomBtn.addEventListener("click", async () => {
+createChatRoom.addEventListener("click", async () => {
     const chatRoomName = chatRoomNameInput.value.trim();
     if (!chatRoomName) {
         alert("Enter a chatroom name!");
@@ -137,6 +159,7 @@ createChatRoomBtn.addEventListener("click", async () => {
         });
 
         chatRoomNameInput.value = ""; // Clear input
+        createChatRoomModal.style.display = "none"; // Close modal
         loadChatRooms(); // Refresh chatroom list
     } catch (error) {
         console.error("Error creating chatroom:", error);
@@ -146,6 +169,10 @@ createChatRoomBtn.addEventListener("click", async () => {
 // Enter Chatroom
 async function enterChatRoom(chatRoomId, chatroom) {
     currentChatRoom = chatRoomId;
+    
+    // Hide header and make chatroom fullscreen
+    bodyElement.classList.add("chatroom-mode");
+    
     chatRoomUI.style.display = "block";
     chatRoomsDiv.style.display = "none";
     chatRoomTitle.textContent = chatroom.name;
@@ -154,6 +181,11 @@ async function enterChatRoom(chatRoomId, chatroom) {
     deleteChatRoomBtn.style.display = (currentUser.email === chatroom.creator) ? "block" : "none";
 
     loadMessages(chatRoomId);
+    
+    // Focus on message input
+    setTimeout(() => {
+        messageInput.focus();
+    }, 300);
 }
 
 // Format timestamp
@@ -176,6 +208,20 @@ function loadMessages(chatRoomId) {
             const message = doc.data();
             const messageDiv = document.createElement("div");
             const time = formatTimestamp(message.timestamp);
+            
+            // Determine if message is from current user to style differently
+            const isCurrentUser = message.username === userFullName || 
+                                 (message.username === currentUser.email && !userFullName);
+            
+            if (isCurrentUser) {
+                messageDiv.style.marginLeft = "auto";
+                messageDiv.style.backgroundColor = "rgba(0, 122, 255, 0.5)";
+                messageDiv.style.borderTopRightRadius = "4px";
+            } else {
+                messageDiv.style.marginRight = "auto";
+                messageDiv.style.borderTopLeftRadius = "4px";
+            }
+            
             messageDiv.innerHTML = `<strong>${message.username}</strong> <span style="color: #999; font-size: 0.8em;">[${time}]</span>: ${message.text}`;
             messagesDiv.appendChild(messageDiv);
         });
@@ -212,6 +258,7 @@ async function sendMessage() {
     });
 
     messageInput.value = "";
+    messageInput.focus();
 }
 
 // Delete Chatroom (Only if user is the creator)
@@ -219,8 +266,7 @@ deleteChatRoomBtn.addEventListener("click", async () => {
     if (confirm("Are you sure you want to delete this chatroom?")) {
         try {
             await deleteDoc(doc(db, "Chatrooms", currentChatRoom));
-            chatRoomUI.style.display = "none";
-            chatRoomsDiv.style.display = "block";
+            exitChatRoom();
             loadChatRooms(); // Refresh list
         } catch (error) {
             console.error("Error deleting chatroom:", error);
@@ -228,8 +274,14 @@ deleteChatRoomBtn.addEventListener("click", async () => {
     }
 });
 
-// Back to Chatrooms
-backToRoomsBtn.addEventListener("click", () => {
+// Exit chatroom function (to keep code DRY)
+function exitChatRoom() {
     chatRoomUI.style.display = "none";
     chatRoomsDiv.style.display = "block";
+    bodyElement.classList.remove("chatroom-mode"); // Show header elements again
+}
+
+// Back to Chatrooms
+backToRoomsBtn.addEventListener("click", () => {
+    exitChatRoom();
 });
