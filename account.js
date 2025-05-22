@@ -37,7 +37,7 @@ const userView = document.getElementById('userView');
 
 // Navigation
 homeBtn.addEventListener('click', () => {
-    window.location.href = 'home.html';
+    window.location.href = 'index.html';
 });
 
 // Modal controls
@@ -340,22 +340,24 @@ document.getElementById('uploadSubmit').addEventListener('click', async () => {
     }
 });
 
-// Load user's images
+// Load user's images - UPDATED TO USE EMAIL INSTEAD OF USERID
 async function loadUserImages() {
     const userGallery = document.getElementById('userGallery');
     const imageCountElement = document.getElementById('imageCount');
     
-    if (!currentUser) {
+    if (!currentUser || !currentUser.email) {
         userGallery.innerHTML = '<p class="loading">Please log in to view your images</p>';
+        imageCountElement.textContent = '0';
         return;
     }
 
     userGallery.innerHTML = '<p class="loading">Loading your images...</p>';
 
     try {
+        // Query by email instead of userId for better consistency
         const q = query(
             collection(db, "user_uploads"), 
-            where("userId", "==", currentUser.uid)
+            where("email", "==", currentUser.email)
         );
         const querySnapshot = await getDocs(q);
         
@@ -376,9 +378,20 @@ async function loadUserImages() {
         userGallery.innerHTML = '';
         let imageCount = 0;
         
+        // Convert to array and sort by timestamp (newest first)
+        const docs = [];
         querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            const docId = doc.id;
+            docs.push({ id: doc.id, data: doc.data() });
+        });
+        
+        // Sort by timestamp (newest first)
+        docs.sort((a, b) => {
+            const timeA = a.data.timestamp?.toDate?.() || new Date(0);
+            const timeB = b.data.timestamp?.toDate?.() || new Date(0);
+            return timeB - timeA;
+        });
+        
+        docs.forEach(({ id: docId, data }) => {
             imageCount++;
             
             const galleryItem = document.createElement('div');
@@ -388,17 +401,28 @@ async function loadUserImages() {
             let timeString = 'Recently';
             if (data.timestamp && data.timestamp.toDate) {
                 const date = data.timestamp.toDate();
-                timeString = date.toLocaleDateString();
+                timeString = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
             }
+            
+            // Get social username display
+            const socialDisplay = data.socialUsername && data.socialUsername !== "Not Provided" 
+                ? `@${data.socialUsername}` 
+                : 'No Instagram';
             
             galleryItem.innerHTML = `
                 <img src="${data.image}" alt="Your uploaded image" loading="lazy">
                 <div class="user-gallery-overlay">
                     <div class="image-info">
                         <small>Uploaded on ${timeString}</small>
+                        <br>
+                        <small>Instagram: ${socialDisplay}</small>
                     </div>
                     <div class="image-actions">
-                        <button class="image-btn download" onclick="downloadImage('${data.image}', '${data.username}')">
+                        <button class="image-btn download" onclick="downloadImage('${data.image}', '${data.username || 'image'}')">
                             Download
                         </button>
                         <button class="image-btn delete" onclick="deleteImage('${docId}', this)">
@@ -415,12 +439,12 @@ async function loadUserImages() {
         
     } catch (error) {
         console.error("Error loading user images: ", error);
-        userGallery.innerHTML = '<p class="loading">Error loading your images</p>';
+        userGallery.innerHTML = '<p class="loading">Error loading your images. Please try refreshing the page.</p>';
         imageCountElement.textContent = '0';
     }
 }
 
-// Delete image function
+// Delete image function - UPDATED TO RELOAD BASED ON EMAIL
 window.deleteImage = async function(docId, buttonElement) {
     if (!confirm('Are you sure you want to delete this image? This action cannot be undone.')) {
         return;
@@ -433,19 +457,22 @@ window.deleteImage = async function(docId, buttonElement) {
     try {
         await deleteDoc(doc(db, "user_uploads", docId));
         
-        // Remove the gallery item from DOM
+        // Remove the gallery item from DOM with animation
         const galleryItem = buttonElement.closest('.user-gallery-item');
+        galleryItem.style.transition = 'all 0.3s ease';
         galleryItem.style.opacity = '0';
         galleryItem.style.transform = 'scale(0.8)';
         
         setTimeout(() => {
             galleryItem.remove();
+            
             // Update image count
             const currentCount = parseInt(document.getElementById('imageCount').textContent);
-            document.getElementById('imageCount').textContent = (currentCount - 1).toString();
+            const newCount = Math.max(0, currentCount - 1);
+            document.getElementById('imageCount').textContent = newCount.toString();
             
             // Check if no images left
-            if (currentCount - 1 === 0) {
+            if (newCount === 0) {
                 loadUserImages(); // Reload to show no images message
             }
         }, 300);
@@ -462,7 +489,7 @@ window.deleteImage = async function(docId, buttonElement) {
 window.downloadImage = function(imageUrl, username) {
     const link = document.createElement('a');
     link.href = imageUrl;
-    link.download = `${username}_image.jpg`;
+    link.download = `${username}_image_${Date.now()}.jpg`;
     link.target = '_blank';
     document.body.appendChild(link);
     link.click();

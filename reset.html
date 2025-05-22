@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password - PixyShare</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(45deg, #e0e0ff, #ffe0e0, #e0ffe0);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: white;
+            border: 3px ridge #cccccc;
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 
+                4px 4px 8px rgba(0,0,0,0.3),
+                inset 1px 1px 0px rgba(255,255,255,0.8);
+            border-radius: 0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px groove #cccccc;
+        }
+
+        .header h1 {
+            color: #0066cc;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #666666;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px inset #cccccc;
+            font-size: 14px;
+            background: white;
+            color: #333333;
+        }
+
+        input[type="email"]:focus {
+            outline: none;
+            border: 2px inset #0066cc;
+            background: #f0f8ff;
+        }
+
+        .button {
+            background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+            border: 2px outset #cccccc;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333333;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            transition: all 0.1s;
+        }
+
+        .button:hover {
+            background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+        }
+
+        .button:active {
+            border: 2px inset #cccccc;
+            background: linear-gradient(to bottom, #d0d0d0, #f0f0f0);
+        }
+
+        .button:disabled {
+            background: #cccccc;
+            color: #888888;
+            cursor: not-allowed;
+            border: 2px outset #aaaaaa;
+        }
+
+        .message {
+            padding: 10px;
+            margin: 15px 0;
+            border: 2px solid;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+
+        .message.success {
+            background: #e0ffe0;
+            border-color: #00aa00;
+            color: #006600;
+        }
+
+        .message.error {
+            background: #ffe0e0;
+            border-color: #aa0000;
+            color: #660000;
+        }
+
+        .info-box {
+            background: #ffffcc;
+            border: 2px ridge #cccccc;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #666666;
+            line-height: 1.4;
+        }
+
+        .info-box h3 {
+            color: #333333;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #cccccc;
+        }
+
+        .footer-links a {
+            color: #0066cc;
+            text-decoration: underline;
+            font-size: 14px;
+            margin: 0 10px;
+        }
+
+        .footer-links a:hover {
+            color: #0044aa;
+            background: #f0f8ff;
+        }
+
+        .footer-links a:visited {
+            color: #800080;
+        }
+
+        .blinking {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .header p {
+                font-size: 12px;
+            }
+            
+            input[type="email"] {
+                padding: 10px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .button {
+                padding: 12px 20px;
+                font-size: 16px;
+            }
+            
+            .footer-links a {
+                display: block;
+                margin: 5px 0;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 15px;
+                border-width: 2px;
+            }
+            
+            .info-box {
+                padding: 10px;
+                font-size: 12px;
+            }
+            
+            .message {
+                font-size: 13px;
+                padding: 8px;
+            }
+        }
+
+        /* Classic scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 16px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border: 1px inset #cccccc;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+            border: 1px outset #cccccc;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 PixyShare Password Reset</h1>
+            <p>Get back into your account</p>
+        </div>
+
+        <div class="info-box">
+            <h3>📧 How it works:</h3>
+            <p>Enter your email address below and we'll send you a secure link to reset your password. Check your inbox (and spam folder) after clicking the button!</p>
+        </div>
+
+        <form id="resetForm">
+            <div class="form-group">
+                <label for="resetEmail">📮 Your Email Address:</label>
+                <input type="email" id="resetEmail" name="resetEmail" required 
+                       placeholder="Enter your email address">
+            </div>
+
+            <button type="submit" id="resetButton" class="button">
+                🚀 Send Reset Link
+            </button>
+        </form>
+
+        <div id="messageBox" class="message"></div>
+
+        <div class="info-box">
+            <h3>🛡️ Security Note:</h3>
+            <p>The reset link will expire after 1 hour for your security. If you don't receive the email within a few minutes, please check your spam folder or try again.</p>
+        </div>
+
+        <div class="footer-links">
+            <a href="account.html">← Back to Account</a>
+            <a href="home.html">🏠 Home Page</a>
+            <a href="#" onclick="location.reload()">🔄 Try Again</a>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #999999;">
+            <p>💻 PixyShare © 2025 | <span class="blinking">●</span> Powered by Firebase</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+        // Firebase configuration (same as account.js)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVQyptr2P7C0pAKBWwq4vhkJ-NhmfkNzU",
+            authDomain: "pixyshare-c918c.firebaseapp.com",
+            projectId: "pixyshare-c918c",
+            storageBucket: "pixyshare-c918c.firebasestorage.app",
+            messagingSenderId: "906028747090",
+            appId: "1:906028747090:web:077d619bb5615e9645528b",
+            measurementId: "G-4PFTVLTB4N"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+
+        // DOM Elements
+        const resetForm = document.getElementById('resetForm');
+        const resetEmail = document.getElementById('resetEmail');
+        const resetButton = document.getElementById('resetButton');
+        const messageBox = document.getElementById('messageBox');
+
+        // Show message function
+        function showMessage(message, isSuccess = false) {
+            messageBox.style.display = 'block';
+            messageBox.textContent = message;
+            messageBox.className = `message ${isSuccess ? 'success' : 'error'}`;
+            
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 10000);
+        }
+
+        // Handle form submission
+        resetForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = resetEmail.value.trim();
+            
+            if (!email) {
+                showMessage('🚫 Please enter your email address!');
+                return;
+            }
+
+            // Disable button and show loading
+            resetButton.disabled = true;
+            resetButton.textContent = '📤 Sending...';
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                
+                showMessage(`✅ Password reset link sent to ${email}! Check your inbox and spam folder.`, true);
+                resetForm.reset();
+                
+                // Show success state
+                resetButton.textContent = '✅ Email Sent!';
+                
+                // Reset button after 5 seconds
+                setTimeout(() => {
+                    resetButton.disabled = false;
+                    resetButton.textContent = '🚀 Send Reset Link';
+                }, 5000);
+                
+            } catch (error) {
+                console.error('Reset error:', error);
+                
+                let errorMessage = '❌ Failed to send reset email. ';
+                
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorMessage += 'No account found with this email address.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage += 'Please enter a valid email address.';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage += 'Too many requests. Please wait a moment and try again.';
+                        break;
+                    default:
+                        errorMessage += 'Please try again later.';
+                }
+                
+                showMessage(errorMessage);
+                
+                // Reset button
+                resetButton.disabled = false;
+                resetButton.textContent = '🚀 Send Reset Link';
+            }
+        });
+
+        // Auto-focus email input
+        window.addEventListener('load', () => {
+            resetEmail.focus();
+        });
+
+        // Get email from URL params if available
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailParam = urlParams.get('email');
+        if (emailParam) {
+            resetEmail.value = emailParam;
+        }
+    </script>
+</body>
+</html>
