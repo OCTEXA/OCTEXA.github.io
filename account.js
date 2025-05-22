@@ -3,15 +3,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, where, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 // Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyCVQyptr2P7C0pAKBWwq4vhkJ-NhmfkNzU",
-    authDomain: "pixyshare-c918c.firebaseapp.com",
-    projectId: "pixyshare-c918c",
-    storageBucket: "pixyshare-c918c.firebasestorage.app",
-    messagingSenderId: "906028747090",
-    appId: "1:906028747090:web:077d619bb5615e9645528b",
-    measurementId: "G-4PFTVLTB4N"
-};
+import { firebaseConfig, IMGBB_API_KEY } from "./firebase-config.js";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -19,7 +11,7 @@ const auth = getAuth();
 const db = getFirestore();
 
 // ImgBB API key
-const IMGBB_API_KEY = "4f4d9f58466506463ea37dce6f973243";
+
 
 let currentUser = null;
 
