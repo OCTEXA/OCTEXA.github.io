@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PixyShare - Share Your Photos</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Your Account - PixyShare</title>
+    <link rel="stylesheet" href="account.css">
 </head>
 <body>
     <!-- Top Navigation Bar -->
@@ -13,6 +13,7 @@
             <h1>PixyShare</h1>
         </div>
         <div class="nav-right">
+            <button id="homeBtn" class="nav-btn">Home</button>
             <button id="uploadBtn" class="nav-btn upload-btn" style="display: none;">Upload</button>
             <button id="loginBtn" class="nav-btn">Login</button>
             <button id="logoutBtn" class="nav-btn" style="display: none;">Logout</button>
@@ -21,7 +22,7 @@
         <!-- Login Prompt Animation -->
         <div id="loginPrompt" class="login-prompt">
             <div class="prompt-arrow"></div>
-            <div class="prompt-text">Login to upload images</div>
+            <div class="prompt-text">Login to view your account</div>
         </div>
     </nav>
 
@@ -72,24 +73,76 @@
         </div>
     </div>
 
-    <!-- Main Gallery -->
-    <div class="gallery-container" id="gallery">
-        <p class="loading">Loading images...</p>
+    <!-- Reset Password Modal -->
+    <div id="resetPasswordModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Reset Password</h2>
+            <div id="resetMessage" class="message" style="display:none;"></div>
+            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px; text-align: center;">
+                Enter your email address and we'll send you a link to reset your password.
+            </p>
+            <input type="email" id="resetEmail" placeholder="Enter your email" required>
+            <button id="submitResetPassword">Send Reset Link</button>
+        </div>
+    </div>
+
+    <!-- Account Content -->
+    <div class="account-container">
+        <!-- Guest View -->
+        <div id="guestView" class="guest-section">
+            <div class="guest-card">
+                <h2>Welcome to Your Account</h2>
+                <p>Please log in to view your profile and manage your uploaded images.</p>
+                <button id="guestLoginBtn" class="account-btn">Sign In</button>
+            </div>
+        </div>
+
+        <!-- User Profile View -->
+        <div id="userView" class="user-section" style="display: none;">
+            <div class="profile-header">
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <span id="userInitials"></span>
+                    </div>
+                    <div class="profile-details">
+                        <h2 id="userName"></h2>
+                        <p id="userEmail"></p>
+                        <div class="profile-stats">
+                            <span class="stat">
+                                <strong id="imageCount">0</strong>
+                                <small>Images Uploaded</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button id="resetPasswordBtn" class="account-btn secondary">Reset Password</button>
+                    <button id="uploadNewBtn" class="account-btn primary">Upload New Image</button>
+                </div>
+            </div>
+
+            <div class="account-section">
+                <h3>Your Images</h3>
+                <div class="user-gallery" id="userGallery">
+                    <p class="loading">Loading your images...</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-buttons">
-               <a href="AboutUs.html" class="footer-btn" id="aboutBtn">About Us</a>
+                 <a href="AboutUs.html" class="footer-btn" id="aboutBtn">About Us</a>
                 <a href="account.html" class="footer-btn" id="accountBtn">Your Account</a>
             </div>
             
             <div class="footer-info">
-                 <h3>images end here 😭 But dont worry login to upload photographs by you!</h3>
                 <h3>PixyShare</h3>
-                <p>Made This Website As A SideProject,  A Simple Place To Share Images.</p>
-                <p>Find Images Uploaded By other Users And Dowload Them, Thanks For visiting Pixyshare.in</p>
+                <p>Made This Website As A SideProject, A Simple Place To Share Images.</p>
+                <p>Find Images Uploaded By other Users And Download Them, Thanks For visiting Pixyshare.in</p>
             </div>
             
             <div class="footer-divider"></div>
@@ -108,6 +161,6 @@
         </div>
     </footer>
 
-    <script type="module" src="index.js"></script>
+    <script type="module" src="account.js"></script>
 </body>
 </html>
