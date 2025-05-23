@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2109016691861219"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Account - PixyShare</title>
     <link rel="stylesheet" href="account.css">
 </head>
 <body>
-
     <!-- Top Navigation Bar -->
     <nav class="navbar">
         <div class="nav-left">
@@ -90,6 +87,48 @@
         </div>
     </div>
 
+    <!-- Delete Account Warning Modal -->
+    <div id="deleteWarningModal" class="modal" style="display: none;">
+        <div class="modal-content delete-warning">
+            <span class="close">&times;</span>
+            <h2>⚠️ Delete Account</h2>
+            <div class="warning-content">
+                <p><strong>This action cannot be undone!</strong></p>
+                <p>Deleting your account will permanently remove:</p>
+                <ul>
+                    <li>Your profile and account information</li>
+                    <li>All uploaded images and data</li>
+                    <li>Your upload history</li>
+                </ul>
+                <p>Are you absolutely sure you want to delete your account?</p>
+            </div>
+            <div class="warning-buttons">
+                <button id="cancelDelete" class="account-btn secondary">Cancel</button>
+                <button id="confirmDelete" class="account-btn danger">Delete Anyway</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Verification Modal -->
+    <div id="emailVerificationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Verify Your Email</h2>
+            <div id="verificationMessage" class="message" style="display:none;"></div>
+            <div class="verification-content">
+                <p>To delete your account, we need to verify your identity.</p>
+                <p>A verification code has been sent to:</p>
+                <p class="email-display" id="verificationEmail"></p>
+                <p>Please enter the 6-digit code below:</p>
+            </div>
+            <input type="text" id="verificationCode" placeholder="Enter 6-digit code" maxlength="6" required>
+            <div class="verification-buttons">
+                <button id="resendCode" class="account-btn secondary">Resend Code</button>
+                <button id="verifyAndDelete" class="account-btn danger">Verify & Delete Account</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Account Content -->
     <div class="account-container">
         <!-- Guest View -->
@@ -122,6 +161,7 @@
                 <div class="profile-actions">
                     <button id="resetPasswordBtn" class="account-btn secondary">Reset Password</button>
                     <button id="uploadNewBtn" class="account-btn primary">Upload New Image</button>
+                    <button id="deleteAccountBtn" class="account-btn danger">Delete Account</button>
                 </div>
             </div>
 
@@ -144,7 +184,7 @@
             
             <div class="footer-info">
                 <h3>PixyShare</h3>
-                <p>Made This Website As A SideProject, A Simple Place To Share Images.</p>
+              <p>Pixyshare.in is a simple website where users can upload photographs taken by them.</p>
                 <p>Find Images Uploaded By other Users And Download Them, Thanks For visiting Pixyshare.in</p>
             </div>
             
@@ -152,7 +192,7 @@
             
             <div class="footer-bottom">
                 <div>
-                   <p>&copy; 2025 PixyShare.in</p>
+                     <p>&copy; 2025 PixyShare.in</p>
                     <p>Contact Us At Pixyshare@gmail.com</p>
                 </div>
                 <div class="footer-social">

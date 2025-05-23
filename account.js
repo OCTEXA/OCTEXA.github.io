@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, where, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail, deleteUser, reauthenticateWithCredential, EmailAuthProvider, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, where, serverTimestamp, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 // Firebase configuration
 import { firebaseConfig, IMGBB_API_KEY } from "./firebase-config.js";
@@ -10,15 +10,20 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
 
-// ImgBB API key
-
+// EmailJS Configuration - You need to set these up at https://www.emailjs.com/
+const EMAILJS_SERVICE_ID = 'service_jv5lemv'; // Replace with your EmailJS service ID
+const EMAILJS_TEMPLATE_ID = 'template_m2v2cez'; // Replace with your EmailJS template ID  
+const EMAILJS_PUBLIC_KEY = 'ZibaA4Tluk4GHqGOH'; // Replace with your EmailJS public key
 
 let currentUser = null;
+let deleteVerificationCode = null;
 
 // DOM Elements
 const loginModal = document.getElementById('loginModal');
 const uploadModal = document.getElementById('uploadModal');
 const resetPasswordModal = document.getElementById('resetPasswordModal');
+const deleteWarningModal = document.getElementById('deleteWarningModal');
+const emailVerificationModal = document.getElementById('emailVerificationModal');
 const loginBtn = document.getElementById('loginBtn');
 const uploadBtn = document.getElementById('uploadBtn');
 const logoutBtn = document.getElementById('logoutBtn');
@@ -26,6 +31,22 @@ const homeBtn = document.getElementById('homeBtn');
 const loginPrompt = document.getElementById('loginPrompt');
 const guestView = document.getElementById('guestView');
 const userView = document.getElementById('userView');
+
+// Initialize EmailJS when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    // Load EmailJS
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.onload = () => {
+        if (window.emailjs && EMAILJS_PUBLIC_KEY !== 'your_public_key') {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+            console.log('EmailJS initialized');
+        } else {
+            console.warn('EmailJS not configured. Please set up EmailJS credentials.');
+        }
+    };
+    document.head.appendChild(script);
+});
 
 // Navigation
 homeBtn.addEventListener('click', () => {
@@ -72,6 +93,30 @@ document.getElementById('resetPasswordBtn').addEventListener('click', () => {
         document.getElementById('resetEmail').value = currentUser.email;
     }
     resetPasswordModal.style.display = 'flex';
+});
+
+// Delete Account Button Event Listener
+document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+    deleteWarningModal.style.display = 'flex';
+});
+
+// Delete Warning Modal Events
+document.getElementById('cancelDelete').addEventListener('click', () => {
+    deleteWarningModal.style.display = 'none';
+});
+
+document.getElementById('confirmDelete').addEventListener('click', () => {
+    deleteWarningModal.style.display = 'none';
+    initiateAccountDeletion();
+});
+
+// Email Verification Modal Events
+document.getElementById('resendCode').addEventListener('click', () => {
+    sendVerificationCode();
+});
+
+document.getElementById('verifyAndDelete').addEventListener('click', () => {
+    verifyCodeAndDeleteAccount();
 });
 
 logoutBtn.addEventListener('click', () => {
@@ -128,6 +173,8 @@ function updateUserProfile() {
 // Message display function
 function showMessage(message, elementId, isSuccess = false) {
     const messageDiv = document.getElementById(elementId);
+    if (!messageDiv) return;
+    
     messageDiv.style.display = "block";
     messageDiv.innerHTML = message;
     
@@ -145,6 +192,235 @@ function showMessage(message, elementId, isSuccess = false) {
     setTimeout(() => {
         messageDiv.style.display = "none";
     }, 5000);
+}
+
+// Generate random 6-digit verification code
+function generateVerificationCode() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// Send verification code via EmailJS
+async function sendVerificationCode() {
+    if (!currentUser || !currentUser.email) {
+        showMessage('User not found', 'verificationMessage');
+        return;
+    }
+
+    try {
+        // Generate verification code
+        deleteVerificationCode = generateVerificationCode();
+        
+        // Display user's email
+        document.getElementById('verificationEmail').textContent = currentUser.email;
+        
+        // Check if EmailJS is configured and initialized
+        if (!window.emailjs || EMAILJS_SERVICE_ID === 'your_service_id' || !EMAILJS_PUBLIC_KEY || EMAILJS_PUBLIC_KEY === 'your_public_key') {
+            // Fallback: Show code in alert for demo/testing
+            console.log('Verification Code:', deleteVerificationCode);
+            alert(`Demo Mode: Your verification code is ${deleteVerificationCode}\n\nTo enable real email sending, please configure EmailJS in the code.`);
+            showMessage('Demo: Verification code shown in alert! (Configure EmailJS for real emails)', 'verificationMessage', true);
+            return;
+        }
+        
+        // Prepare template parameters with multiple variations to handle different template setups
+        const templateParams = {
+            // Primary parameters
+            to_email: currentUser.email,
+            to_name: currentUser.userData?.firstName || 'User',
+            user_name: currentUser.userData?.firstName || 'User',
+            verification_code: deleteVerificationCode,
+            from_name: 'Photo Gallery App',
+            // Alternative parameter names for different template configurations
+            recipient_email: currentUser.email,
+            email: currentUser.email,
+            user_email: currentUser.email,
+            reply_to: currentUser.email,
+            // Message content
+            message: `Your verification code for account deletion is: ${deleteVerificationCode}`,
+            subject: 'Account Deletion Verification Code'
+        };
+        
+        console.log('Sending email with params:', {
+            service: EMAILJS_SERVICE_ID,
+            template: EMAILJS_TEMPLATE_ID,
+            to_email: currentUser.email,
+            verification_code: deleteVerificationCode
+        });
+        
+        // Send email using EmailJS
+        const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+        
+        console.log('EmailJS response:', response);
+        
+        if (response.status === 200) {
+            showMessage('Verification code sent to your email!', 'verificationMessage', true);
+        } else {
+            throw new Error(`EmailJS returned status: ${response.status}`);
+        }
+        
+    } catch (error) {
+        console.error('Error sending verification code:', error);
+        
+        // Enhanced error handling
+        if (error.status === 422) {
+            console.error('EmailJS Template Error - Check your template configuration');
+            console.error('Template might be missing recipient field or using different parameter names');
+            showMessage('Email template configuration error. Using demo mode instead.', 'verificationMessage');
+        } else if (error.status === 400) {
+            console.error('EmailJS Bad Request - Check service ID and template ID');
+            showMessage('Email service configuration error. Using demo mode instead.', 'verificationMessage');
+        } else if (error.status === 403) {
+            console.error('EmailJS Forbidden - Check your public key and service permissions');
+            showMessage('Email service permissions error. Using demo mode instead.', 'verificationMessage');
+        } else {
+            console.error('General EmailJS error:', error.message || error);
+            showMessage('Email service temporarily unavailable. Using demo mode instead.', 'verificationMessage');
+        }
+        
+        // Always provide fallback with verification code
+        console.log('Verification Code (fallback):', deleteVerificationCode);
+        
+        // Show code in alert as fallback
+        setTimeout(() => {
+            alert(`Email Error - Your verification code is: ${deleteVerificationCode}\n\nPlease use this code to proceed with account deletion.`);
+        }, 1000);
+    }
+}
+
+// Re-authentication helper function
+async function reauthenticateUser() {
+    return new Promise((resolve, reject) => {
+        const password = prompt('For security, please enter your current password:');
+        if (!password) {
+            reject(new Error('Password required for account deletion'));
+            return;
+        }
+        
+        const credential = EmailAuthProvider.credential(currentUser.email, password);
+        reauthenticateWithCredential(currentUser, credential)
+            .then(() => {
+                console.log('User re-authenticated successfully');
+                resolve();
+            })
+            .catch((error) => {
+                console.error('Re-authentication failed:', error);
+                reject(error);
+            });
+    });
+}
+
+// Initiate account deletion process
+async function initiateAccountDeletion() {
+    if (!currentUser) {
+        alert('No user logged in');
+        return;
+    }
+
+    // Send verification code and show email verification modal
+    await sendVerificationCode();
+    emailVerificationModal.style.display = 'flex';
+}
+
+// Verify code and delete account
+async function verifyCodeAndDeleteAccount() {
+    const enteredCode = document.getElementById('verificationCode').value.trim();
+    
+    if (!enteredCode) {
+        showMessage('Please enter the verification code', 'verificationMessage');
+        return;
+    }
+    
+    if (enteredCode !== deleteVerificationCode) {
+        showMessage('Invalid verification code. Please try again.', 'verificationMessage');
+        return;
+    }
+    
+    // Code is correct, proceed with account deletion
+    try {
+        // Show loading state
+        const verifyButton = document.getElementById('verifyAndDelete');
+        const originalText = verifyButton.textContent;
+        verifyButton.textContent = 'Deleting Account...';
+        verifyButton.disabled = true;
+        
+        // Try to re-authenticate user for security
+        try {
+            await reauthenticateUser();
+        } catch (reauthError) {
+            if (reauthError.message !== 'Password required for account deletion') {
+                console.log('Re-authentication failed, but proceeding with deletion...');
+            } else {
+                // Reset button and return
+                verifyButton.textContent = originalText;
+                verifyButton.disabled = false;
+                return;
+            }
+        }
+        
+        // Delete all user's uploaded images from Firestore
+        await deleteUserData();
+        
+        // Delete user account from Firebase Auth
+        await deleteUser(currentUser);
+        
+        // Close modal and redirect
+        emailVerificationModal.style.display = 'none';
+        
+        // Show success message and redirect
+        alert('Account deleted successfully. You will be redirected to the home page.');
+        window.location.href = 'index.html';
+        
+    } catch (error) {
+        console.error('Error deleting account:', error);
+        
+        // Reset button
+        const verifyButton = document.getElementById('verifyAndDelete');
+        verifyButton.textContent = 'Verify & Delete Account';
+        verifyButton.disabled = false;
+        
+        if (error.code === 'auth/requires-recent-login') {
+            showMessage('For security reasons, please sign out and sign back in, then try deleting your account again.', 'verificationMessage');
+        } else if (error.code === 'auth/user-not-found') {
+            showMessage('User account not found. You may already be signed out.', 'verificationMessage');
+        } else {
+            showMessage(`Failed to delete account: ${error.message || 'Please try again.'}`, 'verificationMessage');
+        }
+    }
+}
+
+// Delete all user data from Firestore
+async function deleteUserData() {
+    if (!currentUser) return;
+    
+    try {
+        // Get all user's uploaded images
+        const q = query(
+            collection(db, "user_uploads"), 
+            where("email", "==", currentUser.email)
+        );
+        const querySnapshot = await getDocs(q);
+        
+        // Create batch for deletion
+        const batch = writeBatch(db);
+        
+        // Add all user's images to batch deletion
+        querySnapshot.forEach((doc) => {
+            batch.delete(doc.ref);
+        });
+        
+        // Delete user profile document
+        const userDocRef = doc(db, "users", currentUser.uid);
+        batch.delete(userDocRef);
+        
+        // Commit the batch
+        await batch.commit();
+        
+        console.log('User data deleted successfully');
+        
+    } catch (error) {
+        console.error('Error deleting user data:', error);
+        throw error;
+    }
 }
 
 // Sign Up
@@ -176,6 +452,8 @@ document.getElementById('submitSignUp').addEventListener('click', async (e) => {
     } catch (error) {
         if (error.code === 'auth/email-already-in-use') {
             showMessage('Email Address Already Exists!', 'signUpMessage');
+        } else if (error.code === 'auth/weak-password') {
+            showMessage('Password should be at least 6 characters', 'signUpMessage');
         } else {
             showMessage('Unable to create user', 'signUpMessage');
         }
@@ -200,6 +478,8 @@ document.getElementById('submitSignIn').addEventListener('click', async (e) => {
     } catch (error) {
         if (error.code === 'auth/invalid-credential') {
             showMessage('Incorrect Email or Password', 'signInMessage');
+        } else if (error.code === 'auth/too-many-requests') {
+            showMessage('Too many failed attempts. Please try again later.', 'signInMessage');
         } else {
             showMessage('Account does not exist', 'signInMessage');
         }
@@ -332,7 +612,7 @@ document.getElementById('uploadSubmit').addEventListener('click', async () => {
     }
 });
 
-// Load user's images - UPDATED TO USE EMAIL INSTEAD OF USERID
+// Load user's images
 async function loadUserImages() {
     const userGallery = document.getElementById('userGallery');
     const imageCountElement = document.getElementById('imageCount');
@@ -436,7 +716,7 @@ async function loadUserImages() {
     }
 }
 
-// Delete image function - UPDATED TO RELOAD BASED ON EMAIL
+// Delete image function
 window.deleteImage = async function(docId, buttonElement) {
     if (!confirm('Are you sure you want to delete this image? This action cannot be undone.')) {
         return;
@@ -498,6 +778,12 @@ window.addEventListener('click', (e) => {
     }
     if (e.target === resetPasswordModal) {
         resetPasswordModal.style.display = 'none';
+    }
+    if (e.target === deleteWarningModal) {
+        deleteWarningModal.style.display = 'none';
+    }
+    if (e.target === emailVerificationModal) {
+        emailVerificationModal.style.display = 'none';
     }
 });
 
