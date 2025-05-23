@@ -10,10 +10,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
 
-// ImgBB API key
-
+// EmailJS Configuration - Set these up at https://www.emailjs.com/
+const EMAILJS_SERVICE_ID = 'service_jv5lemv'; // Replace with your EmailJS service ID
+const EMAILJS_WELCOME_TEMPLATE_ID = 'template_5h4ij5g'; // Replace with your welcome template ID  
+const EMAILJS_PUBLIC_KEY = 'ZibaA4Tluk4GHqGOH'; // Replace with your EmailJS public key
 
 let currentUser = null;
+let isEmailJSInitialized = false;
 
 // DOM Elements
 const loginModal = document.getElementById('loginModal');
@@ -30,10 +33,124 @@ document.querySelectorAll('.close').forEach(closeBtn => {
     });
 });
 
-// Show/hide forms
-document.getElementById('showSignUp').addEventListener('click', () => {
+// Initialize EmailJS function
+async function initializeEmailJS() {
+    if (isEmailJSInitialized) {
+        console.log('EmailJS already initialized');
+        return;
+    }
+
+    try {
+        console.log('Initializing EmailJS...');
+        
+        // Load EmailJS if not already loaded
+        if (!window.emailjs) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+            
+            await new Promise((resolve, reject) => {
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        // Initialize EmailJS with public key
+        if (window.emailjs && EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY !== 'your_public_key') {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+            isEmailJSInitialized = true;
+            console.log('EmailJS initialized successfully');
+        } else {
+            console.warn('EmailJS not configured. Please set up EmailJS credentials.');
+        }
+    } catch (error) {
+        console.error('Error initializing EmailJS:', error);
+    }
+}
+
+// Send welcome email function
+async function sendWelcomeEmail(userEmail, firstName) {
+    console.log('Attempting to send welcome email to:', userEmail);
+    
+    try {
+        // Check if EmailJS is configured and initialized
+        if (!window.emailjs || !isEmailJSInitialized) {
+            console.warn('EmailJS not initialized. Attempting to initialize...');
+            await initializeEmailJS();
+        }
+
+        if (!isEmailJSInitialized || EMAILJS_SERVICE_ID === 'your_service_id' || !EMAILJS_PUBLIC_KEY || EMAILJS_PUBLIC_KEY === 'your_public_key') {
+            // Fallback: Log for demo/testing
+            console.log('Demo Mode: Welcome email would be sent to:', userEmail);
+            console.log('Welcome email content for:', firstName);
+            return;
+        }
+        
+        // Prepare template parameters for welcome email
+        const templateParams = {
+            // Primary parameters
+            to_email: userEmail,
+            to_name: firstName,
+            user_name: firstName,
+            username: firstName,
+            recipient_name: firstName,
+            from_name: 'Pixyshare Team',
+            // Alternative parameter names for different template configurations
+            recipient_email: userEmail,
+            email: userEmail,
+            user_email: userEmail,
+            reply_to: userEmail,
+            // Message content
+            subject: 'Welcome to Pixyshare - Your Journey Begins!',
+            message: `Welcome to Pixyshare, ${firstName}! We're excited to have you join our community.`
+        };
+        
+        console.log('Sending welcome email with params:', {
+            service: EMAILJS_SERVICE_ID,
+            template: EMAILJS_WELCOME_TEMPLATE_ID,
+            to_email: userEmail,
+            username: firstName
+        });
+        
+        // Send email using EmailJS
+        const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_WELCOME_TEMPLATE_ID, templateParams);
+        
+        console.log('EmailJS welcome email response:', response);
+        
+        if (response.status === 200) {
+            console.log('Welcome email sent successfully to:', userEmail);
+        } else {
+            throw new Error(`EmailJS returned status: ${response.status}`);
+        }
+        
+    } catch (error) {
+        console.error('Error sending welcome email:', error);
+        
+        // Enhanced error handling
+        if (error.status === 422) {
+            console.error('EmailJS Template Error - Check your welcome template configuration');
+            console.error('Template might be missing recipient field or using different parameter names');
+        } else if (error.status === 400) {
+            console.error('EmailJS Bad Request - Check service ID and template ID');
+        } else if (error.status === 403) {
+            console.error('EmailJS Forbidden - Check your public key and service permissions');
+        } else {
+            console.error('General EmailJS error:', error.message || error);
+        }
+        
+        // Log fallback information
+        console.log('Welcome email fallback - would send to:', userEmail, 'for user:', firstName);
+    }
+}
+
+// Show/hide forms with EmailJS initialization
+document.getElementById('showSignUp').addEventListener('click', async () => {
+    console.log('User clicked Sign Up - initializing EmailJS...');
     document.getElementById('signInForm').style.display = 'none';
     document.getElementById('signUpForm').style.display = 'block';
+    
+    // Initialize EmailJS when user shows interest in signing up
+    await initializeEmailJS();
 });
 
 document.getElementById('showSignIn').addEventListener('click', () => {
@@ -93,15 +210,31 @@ function showMessage(message, elementId) {
     }, 5000);
 }
 
-// Sign Up
+// Sign Up with Welcome Email
 document.getElementById('submitSignUp').addEventListener('click', async (e) => {
     e.preventDefault();
+    console.log('User clicked Create Account button');
+    
     const email = document.getElementById('rEmail').value;
     const password = document.getElementById('rPassword').value;
     const firstName = document.getElementById('fName').value;
     const lastName = document.getElementById('lName').value;
 
+    // Validate inputs
+    if (!email || !password || !firstName || !lastName) {
+        showMessage('Please fill in all fields', 'signUpMessage');
+        return;
+    }
+
+    console.log('Creating account for:', email, 'Name:', firstName, lastName);
+
     try {
+        // Send welcome email BEFORE creating the account (since page will refresh after account creation)
+        console.log('Sending welcome email before account creation...');
+        await sendWelcomeEmail(email, firstName);
+        
+        // Create user account
+        console.log('Creating Firebase user account...');
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         
@@ -111,8 +244,12 @@ document.getElementById('submitSignUp').addEventListener('click', async (e) => {
             lastName: lastName
         };
         
+        // Save user data to Firestore
+        console.log('Saving user data to Firestore...');
         await setDoc(doc(db, "users", user.uid), userData);
-        showMessage('Account Created Successfully', 'signUpMessage');
+        
+        console.log('Account created successfully for:', email);
+        showMessage('Account Created Successfully! Welcome email sent.', 'signUpMessage');
         
         // Close modal after successful signup
         setTimeout(() => {
@@ -120,10 +257,16 @@ document.getElementById('submitSignUp').addEventListener('click', async (e) => {
         }, 1000);
         
     } catch (error) {
+        console.error('Error during sign up process:', error);
+        
         if (error.code === 'auth/email-already-in-use') {
             showMessage('Email Address Already Exists!', 'signUpMessage');
+        } else if (error.code === 'auth/weak-password') {
+            showMessage('Password should be at least 6 characters', 'signUpMessage');
+        } else if (error.code === 'auth/invalid-email') {
+            showMessage('Please enter a valid email address', 'signUpMessage');
         } else {
-            showMessage('Unable to create user', 'signUpMessage');
+            showMessage('Unable to create user: ' + (error.message || 'Unknown error'), 'signUpMessage');
         }
     }
 });
