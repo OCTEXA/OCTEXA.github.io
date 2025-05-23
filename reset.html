@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2109016691861219"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password - PixyShare</title>
@@ -14,255 +12,408 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(45deg, #e0e0ff, #ffe0e0, #e0ffe0);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(79, 172, 254, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            animation: float 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(2deg); }
+            66% { transform: translateY(-10px) rotate(-1deg); }
         }
 
         .container {
-            background: white;
-            border: 3px ridge #cccccc;
-            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
             width: 100%;
             max-width: 450px;
             box-shadow: 
-                4px 4px 8px rgba(0,0,0,0.3),
-                inset 1px 1px 0px rgba(255,255,255,0.8);
-            border-radius: 0;
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                0 15px 12px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            position: relative;
+            z-index: 1;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header {
             text-align: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px groove #cccccc;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
         }
 
         .header h1 {
-            color: #0066cc;
-            font-size: 24px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-            margin-bottom: 5px;
+            color: #333;
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: none;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header p {
-            color: #666666;
-            font-size: 14px;
-            font-style: italic;
+            color: #666;
+            font-size: 16px;
+            font-weight: 400;
+            font-style: normal;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         label {
             display: block;
-            font-weight: bold;
-            color: #333333;
-            margin-bottom: 5px;
-            font-size: 14px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+            font-size: 15px;
         }
 
         input[type="email"] {
             width: 100%;
-            padding: 8px;
-            border: 2px inset #cccccc;
-            font-size: 14px;
-            background: white;
-            color: #333333;
+            padding: 15px 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            transition: all 0.3s ease;
+            font-family: inherit;
         }
 
         input[type="email"]:focus {
             outline: none;
-            border: 2px inset #0066cc;
-            background: #f0f8ff;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        input[type="email"]::placeholder {
+            color: #999;
         }
 
         .button {
-            background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
-            border: 2px outset #cccccc;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #333333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
             cursor: pointer;
             width: 100%;
-            margin: 10px 0;
-            transition: all 0.1s;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
 
         .button:hover {
-            background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .button:hover::before {
+            left: 100%;
         }
 
         .button:active {
-            border: 2px inset #cccccc;
-            background: linear-gradient(to bottom, #d0d0d0, #f0f0f0);
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
         }
 
         .button:disabled {
-            background: #cccccc;
-            color: #888888;
+            background: #ccc;
+            color: #888;
             cursor: not-allowed;
-            border: 2px outset #aaaaaa;
+            transform: none;
+            box-shadow: none;
         }
 
-        .message {
-            padding: 10px;
-            margin: 15px 0;
-            border: 2px solid;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: center;
+        .button:disabled::before {
             display: none;
         }
 
+        .message {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .message.success {
-            background: #e0ffe0;
-            border-color: #00aa00;
-            color: #006600;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2);
         }
 
         .message.error {
-            background: #ffe0e0;
-            border-color: #aa0000;
-            color: #660000;
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
         }
 
         .info-box {
-            background: #ffffcc;
-            border: 2px ridge #cccccc;
-            padding: 15px;
-            margin: 20px 0;
-            font-size: 13px;
-            color: #666666;
-            line-height: 1.4;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            backdrop-filter: blur(5px);
         }
 
         .info-box h3 {
-            color: #333333;
-            font-size: 14px;
-            margin-bottom: 8px;
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .footer-links {
             text-align: center;
-            margin-top: 25px;
-            padding-top: 15px;
-            border-top: 1px solid #cccccc;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(102, 126, 234, 0.2);
         }
 
         .footer-links a {
-            color: #0066cc;
-            text-decoration: underline;
-            font-size: 14px;
-            margin: 0 10px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
         }
 
         .footer-links a:hover {
-            color: #0044aa;
-            background: #f0f8ff;
+            color: #764ba2;
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
         }
 
         .footer-links a:visited {
-            color: #800080;
+            color: #667eea;
         }
 
         .blinking {
-            animation: blink 1s infinite;
+            animation: blink 2s ease-in-out infinite;
         }
 
         @keyframes blink {
             0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+            51%, 100% { opacity: 0.3; }
         }
 
         /* Responsive Design */
         @media (max-width: 600px) {
             body {
-                padding: 10px;
+                padding: 15px;
             }
             
             .container {
-                padding: 20px;
+                padding: 30px 25px;
+                border-radius: 15px;
             }
             
             .header h1 {
-                font-size: 20px;
+                font-size: 24px;
             }
             
             .header p {
-                font-size: 12px;
+                font-size: 14px;
             }
             
             input[type="email"] {
-                padding: 10px;
-                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 12px 15px;
+                font-size: 16px;
             }
             
             .button {
-                padding: 12px 20px;
+                padding: 14px 25px;
                 font-size: 16px;
             }
             
             .footer-links a {
                 display: block;
-                margin: 5px 0;
+                margin: 8px 0;
+                padding: 10px 15px;
+            }
+
+            .info-box {
+                padding: 15px;
             }
         }
 
         @media (max-width: 400px) {
             .container {
-                padding: 15px;
-                border-width: 2px;
+                padding: 25px 20px;
+                border-radius: 12px;
             }
             
             .info-box {
-                padding: 10px;
-                font-size: 12px;
+                padding: 15px;
+                font-size: 13px;
             }
             
             .message {
-                font-size: 13px;
-                padding: 8px;
+                font-size: 14px;
+                padding: 12px 15px;
+            }
+
+            .header h1 {
+                font-size: 22px;
             }
         }
 
-        /* Classic scrollbar for webkit browsers */
+        /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 16px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #f0f0f0;
-            border: 1px inset #cccccc;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
-            border: 1px outset #cccccc;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+        }
+
+        /* Additional subtle animations */
+        .container:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.15),
+                0 20px 15px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        /* Loading state animation */
+        .button:disabled {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button:disabled::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
     </style>
 </head>
 <body>
-   
     <div class="container">
         <div class="header">
             <h1>🔐 PixyShare Password Reset</h1>
@@ -295,7 +446,7 @@
 
         <div class="footer-links">
             <a href="account.html">← Back to Account</a>
-            <a href="home.html">🏠 Home Page</a>
+            <a href="index.html">🏠 Home Page</a>
             <a href="#" onclick="location.reload()">🔄 Try Again</a>
         </div>
 
